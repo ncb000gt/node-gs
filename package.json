@@ -10,7 +10,6 @@
     "type": "git",
     "url": "http://github.com/ncb000gt/node-gs.git"
   },
-  "main": "lib/gs",
   "scripts": {
     "test": "make test"
   },
