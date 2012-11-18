@@ -1,6 +1,8 @@
 gs
 =====
 
+[![Build Status](https://secure.travis-ci.org/ncb000gt/node-gs.png)](http://travis-ci.org/#!/ncb000gt/node-gs)
+
 NodeJS wrapper for `gs`
 
 
@@ -11,7 +13,7 @@ Usage
     gs()
       .batch()
       .output()
-      .inputs([files])
+      .input(input)
       .exec(function(err, data) {
         console.log(data.toString());
       });
@@ -24,7 +26,7 @@ API
 * `nopause`
 * `device` - device - defaults to `txtwrite`
 * `output` - file - defaults to `-` which represents stdout
-* `inputs` - file or files
+* `input` - file
 * `exec` - callback
 
 
