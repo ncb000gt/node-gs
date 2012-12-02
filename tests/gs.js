@@ -30,6 +30,14 @@ describe('gs', function() {
     assert.deepEqual(gs().input('file')._input, 'file');
     done();
   });
+  it('should set definition with value', function(done) {
+    assert.deepEqual(gs().define('FirstPage', 1).options, ['-dFirstPage=1']);
+    done();
+  });
+  it('should set device resolution', function(done) {
+    assert.deepEqual(gs().res(240, 72).options, ['-r240x72']);
+    done();
+  });
 
   describe('#exec', function() {
     it('should pass an error for no inputs', function(done) {

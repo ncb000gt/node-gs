@@ -28,6 +28,10 @@ function gs() {
       this.options.push('-dNOPAUSE');
       return this;
     },
+    "define": function(key, val) {
+      this.options.push('-d' + key + (val ? '=' + val : ''));
+      return this;
+    },
     "device": function(dev) {
       dev = dev || 'txtwrite';
       this.options.push('-sDEVICE=' + dev);
@@ -40,6 +44,10 @@ function gs() {
     "output": function(file) {
       file = file || '-';
       this.options.push('-sOutputFile=' + file);
+      return this;
+    },
+    "res": function(xres, yres) {
+      this.options.push('-r' + xres + (yres ? 'x' + yres : ''));
       return this;
     },
     "exec": function(cb) {
