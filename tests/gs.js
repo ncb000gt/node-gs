@@ -38,22 +38,26 @@ describe('gs', function() {
     assert.deepEqual(gs().res(240, 72).options, ['-r240x72']);
     done();
   });
-	it('should set the paper size', function(done) {
+  it('should set the paper size', function(done) {
     assert.deepEqual(gs().papersize('a4').options, ['-sPAPERSIZE=a4']);
     done();
-	});
-	it('should set gs to run in safe mode', function(done) {
+  });
+  it('should set gs to run in safe mode', function(done) {
     assert.deepEqual(gs().safer().options, ['-dSAFER']);
     done();
-	});
-	it('should tell gs to be quiet', function(done) {
-		assert.deepEqual(gs().q().options, ['-q']);
-		done();
-	});
-	it('should tell gs to use current directory for libraries first', function(done) {
-		assert.deepEqual(gs().p().options, ['-p']);
-		done();
-	});
+  });
+  it('should tell gs to be quiet', function(done) {
+    assert.deepEqual(gs().q().options, ['-q']);
+    done();
+  });
+  it('should tell gs to use current directory for libraries first', function(done) {
+    assert.deepEqual(gs().p().options, ['-p']);
+    done();
+  });
+  it('should tell gs to interpret PostScript code', function(done) {
+    assert.deepEqual(gs().command('quit').options, ['-c', 'quit']);
+    done();
+  });
 
   describe('#exec', function() {
     it('should pass an error for no inputs', function(done) {
@@ -84,6 +88,19 @@ describe('gs', function() {
 
           done();
         });
+    });
+  });
+
+  describe('#pagecount', function() {
+    it('should return number of pages', function(done) {
+      gs()
+        .input('./tests/pdfs/sizes.pdf')
+        .pagecount(function(err, count){
+          assert.ok(!err);
+          assert.equal(count, 3);
+
+          done();
+        })
     });
   });
 });
