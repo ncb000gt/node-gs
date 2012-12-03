@@ -28,6 +28,10 @@ function gs() {
       this.options.push('-dNOPAUSE');
       return this;
     },
+    "command": function(cmd) {
+      this.options.push('-c', cmd.replace(/(\s)/g,'\ '));
+      return this;
+    },
     "define": function(key, val) {
       this.options.push('-d' + key + (val ? '=' + val : ''));
       return this;

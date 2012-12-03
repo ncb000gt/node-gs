@@ -54,6 +54,10 @@ describe('gs', function() {
     assert.deepEqual(gs().p().options, ['-p']);
     done();
   });
+  it('should tell gs to interpret PostScript code', function(done) {
+    assert.deepEqual(gs().command('quit').options, ['-c', 'quit']);
+    done();
+  });
 
   describe('#exec', function() {
     it('should pass an error for no inputs', function(done) {
