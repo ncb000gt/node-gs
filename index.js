@@ -44,29 +44,29 @@ function gs() {
     "output": function(file) {
       file = file || '-';
       this.options.push('-sOutputFile=' + file);
-			if (file === '-') return this.q();
+      if (file === '-') return this.q();
       return this;
     },
-		"q": function() {
-			this.options.push('-q');
+    "q": function() {
+      this.options.push('-q');
       return this;
-		},
-		"p": function() {
-			this.options.push('-p');
+    },
+    "p": function() {
+      this.options.push('-p');
       return this;
-		},
-		"papersize": function(size) {
-			this.options.push('-sPAPERSIZE=' + size);
-			return this;
-		},
+    },
+    "papersize": function(size) {
+      this.options.push('-sPAPERSIZE=' + size);
+      return this;
+    },
     "res": function(xres, yres) {
       this.options.push('-r' + xres + (yres ? 'x' + yres : ''));
       return this;
     },
-		"safer": function() {
-			this.options.push('-dSAFER');
-			return this;
-		},
+    "safer": function() {
+      this.options.push('-dSAFER');
+      return this;
+    },
     "exec": function(cb) {
       var self = this;
       if (!this._input) return cb.call(self, 'No input specified');
