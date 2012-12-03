@@ -19,7 +19,7 @@ describe('gs', function() {
     done();
   });
   it('should set output option with default', function(done) {
-    assert.deepEqual(gs().output().options, ['-sOutputFile=-']);
+    assert.deepEqual(gs().output().options, ['-sOutputFile=-', '-q']);
     done();
   });
   it('should set output option with value', function(done) {
@@ -64,7 +64,7 @@ describe('gs', function() {
         .exec(function(err, data) {
           assert.ok(!err);
           assert.equal(this._input, './tests/pdfs/sizes.pdf');
-          assert.equal(data, "Page 1\n               Normal\r\nPage 2\n           Envelope\r\nPage 3\n     Landscape\r\n");
+          assert.equal(data, "               Normal\r\n           Envelope\r\n     Landscape\r\n");
 
           done();
         });

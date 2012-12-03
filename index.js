@@ -44,8 +44,13 @@ function gs() {
     "output": function(file) {
       file = file || '-';
       this.options.push('-sOutputFile=' + file);
+			if (file === '-') this.options.push('-q');
       return this;
     },
+		"papersize": function(size) {
+			this.options.push('-sPAPERSIZE=' + size);
+			return this;
+		},
     "res": function(xres, yres) {
       this.options.push('-r' + xres + (yres ? 'x' + yres : ''));
       return this;
@@ -63,10 +68,8 @@ function gs() {
       proc.stdout.on('data', function(data) { totalBytes += data.length; _data.push(data); });
       proc.on('close', function() {
         var buf = Buffer.concat(_data, totalBytes);
-        var _datas = buf.toString().split('\n');
-        _datas = _datas.slice(4); //strip out cra
 
-        return cb.call(self, null, _datas.join('\n'));
+        return cb.call(self, null, buf.toString());
       });
       process.on('exit', function() {
         proc.kill();
