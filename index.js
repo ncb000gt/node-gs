@@ -90,6 +90,16 @@ function gs() {
       process.on('exit', function() {
         proc.kill();
       });
+    },
+    "pagecount": function(cb) {
+      var self = this;
+      if (!this._input) return cb.call(self, 'No input specified');
+      this.q()
+        .command('(' + this._input + ') (r) file runpdfbegin pdfpagecount = quit')
+        .exec(function(err, data){
+          if (err) return cb.call(self, err);
+          return cb.call(self, null, data);
+        });
     }
   };
 }

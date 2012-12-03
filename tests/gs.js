@@ -90,4 +90,17 @@ describe('gs', function() {
         });
     });
   });
+
+  describe('#pagecount', function() {
+    it('should return number of pages', function(done) {
+      gs()
+        .input('./tests/pdfs/sizes.pdf')
+        .pagecount(function(err, count){
+          assert.ok(!err);
+          assert.equal(count, 3);
+
+          done();
+        })
+    });
+  });
 });
