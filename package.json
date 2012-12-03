@@ -1,7 +1,7 @@
 {
   "name": "gs",
   "description": "Provide access to ghostscript",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Nick Campbell <nicholas.j.campbell@gmail.com> (http://github.com/ncb000gt)",
   "bugs" : {
     "url" : "http://github.com/ncb000gt/node-gs/issues"
