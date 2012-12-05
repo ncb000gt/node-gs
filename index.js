@@ -1,107 +1,164 @@
-var spawn = require('child_process').spawn;
+var spawn = require('child_process').spawn,
+	EventEmitter = require('events').EventEmitter;
 
-function gs() {
-  return {
-    "options": [],
-    "_input": null,
-    "batch": function() {
-      this.options.push('-dBATCH');
-      return this;
-    },
-    "diskfonts": function() {
-      this.options.push('-dDISKFONTS');
-      return this;
-    },
-    "nobind": function() {
-      this.options.push('-dNOBIND');
-      return this;
-    },
-    "nocache": function() {
-      this.options.push('-dNOCACHE');
-      return this;
-    },
-    "nodisplay": function() {
-      this.options.push('-dNODISPLAY');
-      return this;
-    },
-    "nopause": function() {
-      this.options.push('-dNOPAUSE');
-      return this;
-    },
-    "command": function(cmd) {
-      this.options.push('-c', cmd.replace(/(\s)/g,'\ '));
-      return this;
-    },
-    "define": function(key, val) {
-      this.options.push('-d' + key + (val ? '=' + val : ''));
-      return this;
-    },
-    "device": function(dev) {
-      dev = dev || 'txtwrite';
-      this.options.push('-sDEVICE=' + dev);
-      return this;
-    },
-    "input": function(file) {
-      this._input = file;
-      return this;
-    },
-    "output": function(file) {
-      file = file || '-';
-      this.options.push('-sOutputFile=' + file);
-      if (file === '-') return this.q();
-      return this;
-    },
-    "q": function() {
-      this.options.push('-q');
-      return this;
-    },
-    "p": function() {
-      this.options.push('-p');
-      return this;
-    },
-    "papersize": function(size) {
-      this.options.push('-sPAPERSIZE=' + size);
-      return this;
-    },
-    "res": function(xres, yres) {
-      this.options.push('-r' + xres + (yres ? 'x' + yres : ''));
-      return this;
-    },
-    "safer": function() {
-      this.options.push('-dSAFER');
-      return this;
-    },
-    "exec": function(cb) {
-      var self = this;
-      if (!this._input) return cb.call(self, 'No input specified');
+module.exports = exports = create;
 
-      var proc = spawn('gs', this.options.concat([this._input]));
-      proc.stdin.on('error', cb);
-      proc.stdout.on('error', cb);
-
-      var _data = [];
-      var totalBytes = 0;
-      proc.stdout.on('data', function(data) { totalBytes += data.length; _data.push(data); });
-      proc.on('close', function() {
-        var buf = Buffer.concat(_data, totalBytes);
-
-        return cb.call(self, null, buf.toString());
-      });
-      process.on('exit', function() {
-        proc.kill();
-      });
-    },
-    "pagecount": function(cb) {
-      var self = this;
-      if (!this._input) return cb.call(self, 'No input specified');
-      this.q()
-        .command('(' + this._input + ') (r) file runpdfbegin pdfpagecount = quit')
-        .exec(function(err, data){
-          if (err) return cb.call(self, err);
-          return cb.call(self, null, data);
-        });
-    }
-  };
+function create() {
+	var _gs = new gs();
+	return _gs;
 }
 
-module.exports = exports = gs;
+function gs() {
+	this.options = [];
+	this._input = null;
+}
+
+gs.prototype.__proto__ = EventEmitter.prototype;
+
+gs.prototype.batch = function() {
+	this.options.push('-dBATCH');
+	return this;
+};
+
+gs.prototype.diskfonts = function() {
+	this.options.push('-dDISKFONTS');
+	return this;
+};
+
+gs.prototype.nobind = function() {
+	this.options.push('-dNOBIND');
+	return this;
+};
+
+gs.prototype.nocache = function() {
+	this.options.push('-dNOCACHE');
+	return this;
+};
+
+gs.prototype.nodisplay = function() {
+	this.options.push('-dNODISPLAY');
+	return this;
+};
+
+gs.prototype.nopause = function() {
+	this.options.push('-dNOPAUSE');
+	return this;
+};
+
+gs.prototype.command = function(cmd) {
+	this.options.push('-c', cmd.replace(/(\s)/g,'\ '));
+	return this;
+};
+
+gs.prototype.define = function(key, val) {
+	this.options.push('-d' + key + (val ? '=' + val : ''));
+	return this;
+};
+
+gs.prototype.device = function(dev) {
+	dev = dev || 'txtwrite';
+	this.options.push('-sDEVICE=' + dev);
+	return this;
+};
+
+gs.prototype.input = function(file) {
+	this._input = file;
+	return this;
+};
+
+gs.prototype.output = function(file) {
+	file = file || '-';
+	this.options.push('-sOutputFile=' + file);
+	if (file === '-') return this.q();
+	return this;
+};
+
+gs.prototype.quiet = function() {
+	this.options.push('-q');
+	return this;
+};
+
+gs.prototype.q = gs.prototype.quiet;
+
+gs.prototype.currentDirectory = function() {
+	this.options.push('-p');
+	return this;
+};
+
+gs.prototype.p = gs.prototype.currentDirectory;
+
+gs.prototype.papersize = function(size) {
+	this.options.push('-sPAPERSIZE=' + size);
+	return this;
+};
+
+gs.prototype.resolution = function(xres, yres) {
+	this.options.push('-r' + xres + (yres ? 'x' + yres : ''));
+	return this;
+};
+
+gs.prototype.res = gs.prototype.r = gs.prototype.resolution;
+
+gs.prototype.reset = function() {
+	this.options = [];
+	this._input = null;
+	return this;
+};
+
+gs.prototype.safer = function() {
+	this.options.push('-dSAFER');
+	return this;
+};
+
+gs.prototype.exec = function(cb) {
+	var self = this;
+	if (!this._input) return cb.call(self, 'No input specified');
+
+	var proc = spawn('gs', this.options.concat([this._input]));
+	proc.stdin.on('error', cb);
+	proc.stdout.on('error', cb);
+
+	var _data = [];
+	var totalBytes = 0;
+
+	proc.stdout.on('data', function(data) {
+		totalBytes += data.length;
+		_data.push(data);
+		var str = data.toString();
+
+		self.emit('data', data.toString());
+
+		if ( str.match(/Processing pages (.*) through (.*)\./) ) {
+			self.emit('pages', RegExp.$1, RegExp.$2);
+		}
+
+		if ( str.match(/Page (.*)/) ) {
+			self.emit('page', RegExp.$1);
+		}
+	});
+
+	proc.on('close', function() {
+		var buf = Buffer.concat(_data, totalBytes);
+
+		cb.call(self, null, buf.toString());
+		return self.emit('close');
+	});
+
+	process.on('exit', function() {
+		proc.kill();
+		self.emit('exit');
+	});
+};
+
+gs.prototype.pagecount = function(cb) {
+	var self = this;
+	if (!this._input) return cb.call(self, 'No input specified');
+
+	this.q()
+		.command('(' + this._input + ') (r) file runpdfbegin pdfpagecount = quit')
+		.exec(function(err, data){
+			if (err) return cb.call(self, err);
+			return cb.call(self, null, data);
+		});
+};
+
