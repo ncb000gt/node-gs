@@ -127,6 +127,40 @@ describe('gs', function() {
 		});
 	});
 
+	describe('#page', function() {
+		it('should tell gs to process single page', function(done) {
+			gs()
+				.nopause()
+				.input('./tests/pdfs/sizes.pdf')
+				.output('./test/pdfs/sizes-%d.jpg')
+				.page(2)
+				.on('pages', function(from, to){
+					assert.equal(from, 2);
+					assert.equal(to, 2);
+					done();
+				})
+				.exec(function(err, data){
+				});
+		});
+	});
+
+	describe('#pages', function() {
+		it('should tell gs to process page range', function(done) {
+			gs()
+				.nopause()
+				.input('./tests/pdfs/sizes.pdf')
+				.output('./test/pdfs/sizes-%d.jpg')
+				.pages(1, 2)
+				.on('pages', function(from, to){
+					assert.equal(from, 1);
+					assert.equal(to, 2);
+					done();
+				})
+				.exec(function(err, data){
+				});
+		});
+	});
+
 	describe('#pagecount', function() {
 		it('should return number of pages', function(done) {
 			gs()

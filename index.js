@@ -150,6 +150,14 @@ gs.prototype.exec = function(cb) {
 	});
 };
 
+gs.prototype.page = function(page) {
+	return this.define('FirstPage', page).define('LastPage', page);
+};
+
+gs.prototype.pages = function(from, to) {
+	return this.define('FirstPage', from).define('LastPage', to);
+};
+
 gs.prototype.pagecount = function(cb) {
 	var self = this;
 	if (!this._input) return cb.call(self, 'No input specified');
